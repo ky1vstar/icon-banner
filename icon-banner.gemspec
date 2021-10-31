@@ -1,6 +1,6 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'icon_banner'
+require 'icon_banner/base'
 
 Gem::Specification.new do |spec|
   spec.name          = 'icon-banner'
