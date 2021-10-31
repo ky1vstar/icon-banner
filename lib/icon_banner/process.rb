@@ -15,12 +15,13 @@ module IconBanner
 
       UI.message "Generating #{self.class::PLATFORM} banners..."
 
-      restore(path) # restore in case it was already run before
+      restore(path, options) # restore in case it was already run before
 
-      app_icons = get_app_icons(path)
+      app_icons = get_app_icons(path, options)
 
       label = options[:label]
       font = options[:font] || IconBanner.font_path
+      background_color = options[:dark] ? "#3b3b3b" : "white"
 
       if app_icons.count > 0
         app_icons.each do |icon_path|
@@ -34,7 +35,7 @@ module IconBanner
           end unless color
 
           banner_file = Tempfile.new %w[banner .png]
-          generate_banner banner_file.path, label, color, font
+          generate_banner banner_file.path, label, color, background_color, font
           process_icon icon_path, banner_file.path
           banner_file.close
 
@@ -48,12 +49,12 @@ module IconBanner
       end
     end
 
-    def restore(path)
+    def restore(path, options)
       return unless validate_platform({})
 
       UI.message "Restoring #{self.class::PLATFORM} icons..."
 
-      app_icons = get_app_icons(path)
+      app_icons = get_app_icons(path, options)
 
       if app_icons.count > 0
         app_icons.each do |icon_path|
@@ -65,8 +66,10 @@ module IconBanner
       UI.message "Completed #{self.class::PLATFORM} restore."
     end
 
-    def get_app_icons(path)
-      app_icons = Dir.glob("#{path}#{self.class::BASE_ICON_PATH}")
+    def get_app_icons(path, options)
+      glob = self.class::BASE_ICON_PATH
+      glob = options[:glob] if options[:glob]
+      app_icons = Dir.glob("#{path}#{glob}")
       app_icons.reject { |icon| should_ignore_icon(icon) }
     end
 
@@ -110,7 +113,7 @@ module IconBanner
       platform.nil? || platform[/#{self.class::PLATFORM_CODE}/i] || platform == 'all'
     end
 
-    def generate_banner(path, label, color, font)
+    def generate_banner(path, label, color, background_color, font)
       UI.error '`generate_banner` should not be run on base class'
     end
 

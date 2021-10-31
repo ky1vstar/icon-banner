@@ -9,7 +9,7 @@ module IconBanner
     PLATFORM = 'iOS'
     PLATFORM_CODE = 'ios'
 
-    def generate_banner(path, label, color, font)
+    def generate_banner(path, label, color, background_color, font)
       MiniMagick::Tool::Convert.new do |convert|
         convert.size '1024x1024'
         convert << 'xc:transparent'
@@ -20,13 +20,13 @@ module IconBanner
 
       banner.combine_options do |combine|
         combine.fill 'rgba(0,0,0,0.25)'
-        combine.draw 'polygon 0,306 0,590 590,0 306,0'
+        combine.draw 'polygon 1024,434 1024,718 718,1024 434,1024'
         combine.blur '0x10'
       end
 
       banner.combine_options do |combine|
-        combine.fill 'white'
-        combine.draw 'polygon 0,306 0,590 590,0 306,0'
+        combine.fill background_color
+        combine.draw 'polygon 1024,434 1024,718 718,1024 434,1024'
       end
 
       banner.combine_options do |combine|
@@ -34,7 +34,7 @@ module IconBanner
         combine.fill color
         combine.gravity 'Center'
         combine.pointsize 150 - ([label.length - 8, 0].max * 8)
-        combine.draw "affine 0.5,-0.5,0.5,0.5,-286,-286 text 0,0 \"#{label}\""
+        combine.draw "affine 0.5,-0.5,0.5,0.5,286,286 text 0,0 \"#{label}\""
       end
     end
 

@@ -9,7 +9,7 @@ module IconBanner
     PLATFORM = 'Android (Legacy)'
     PLATFORM_CODE = 'android'
 
-    def generate_banner(path, label, color, font)
+    def generate_banner(path, label, color, background_color, font)
       size = 1024
       font_size = 140 - ([label.length - 12, 0].max * 12)
 
@@ -59,7 +59,7 @@ module IconBanner
       end
 
       banner.combine_options do |combine|
-        combine.fill 'white'
+        combine.fill background_color
         combine.draw polygon
       end
 

@@ -52,13 +52,19 @@ module IconBanner
       IcLauncher.new.generate(path, options)
     end
 
-    def self.restore(path)
-      AppIconSet.new.restore(path)
-      IcLauncher.new.restore(path)
+    def self.restore(path, options)
+      AppIconSet.new.restore(path, options)
+      IcLauncher.new.restore(path, options)
     end
 
     def self.available_options
       [
+          FastlaneCore::ConfigItem.new(key: :dark,
+                                       description: "Adds a dark banner instead of the white",
+                                       is_string: false,
+                                       default_value: false,
+                                       optional: true),
+
           FastlaneCore::ConfigItem.new(key: :label,
                                        description: 'Sets the text to display inside the banner',
                                        default_value: 'BETA',
@@ -81,7 +87,19 @@ module IconBanner
           FastlaneCore::ConfigItem.new(key: :platform,
                                        description: 'Selects the platform to process (`ios`, `android` or `all`). Auto-inferred by lane if available',
                                        default_value: 'all',
-                                       optional: true)
+                                       optional: true),
+
+          FastlaneCore::ConfigItem.new(key: :glob,
+                                       description: "Glob pattern for finding image files. Default: CURRENT_PATH/**/*.appiconset/*.{png,PNG} of iOS and CURRENT_PATH/**/ic_launcher*.png for Android",
+                                       optional: true),
+      ]
+    end
+
+    def self.restore_available_options
+      [
+          FastlaneCore::ConfigItem.new(key: :glob,
+                                       description: "Glob pattern for finding image files. Default: CURRENT_PATH/**/*.appiconset/*.{png,PNG} of iOS and CURRENT_PATH/**/ic_launcher*.png for Android",
+                                       optional: true),
       ]
     end
 

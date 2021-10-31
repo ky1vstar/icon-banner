@@ -6,7 +6,7 @@ module Fastlane
     class IconBannerRestoreAction < Action
       def self.run(params)
         Actions.verify_gem!('icon-banner')
-        Helper::IconBannerHelper.restore
+        Helper::IconBannerHelper.restore(params)
       end
 
       def self.description
@@ -15,6 +15,10 @@ module Fastlane
 
       def self.authors
         ['ebelair']
+      end
+
+      def self.available_options
+        Helper::IconBannerHelper.restore_available_options
       end
 
       def self.example_code
